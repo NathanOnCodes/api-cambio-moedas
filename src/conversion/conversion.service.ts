@@ -1,7 +1,8 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Conversion } from 'src/entities/conversion.entity';
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { CreateConversionDto } from './dto/create-conversion.dto';
 
 
 @Injectable()
@@ -12,5 +13,26 @@ export class ConversionService {
 
     async findAllExchanges(): Promise<Conversion[]>{
         return this.conversionRepository.find();
+    }
+
+    async newConversion(params: CreateConversionDto): Promise<{conversion: Conversion, status: HttpStatus}> {
+        const choices = {
+            "BRL": "R$",
+		    "USD": "$",
+		    "BTC": "₿",
+		    "EUR": "€",
+        }
+        const resConvert = params.amount * params.rate;
+        const symbolKey = choices[params.to.toUpperCase()];
+        const createdConversion = await this.conversionRepository.save(
+            {
+                value: resConvert,
+                symbol: symbolKey
+            })
+
+        return {
+            conversion : createdConversion,
+            status: HttpStatus.CREATED
+        };
     }
 }
