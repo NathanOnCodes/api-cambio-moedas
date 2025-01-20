@@ -1,24 +1,20 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ConversionController } from './conversion/conversion.controller';
-import { ConversionService } from './conversion/conversion.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConversionModule } from './conversion/conversion.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'postgres_db',
+      host: 'localhost',
       port: 5432,   
       username: 'adm',
       password: 'password',
       database: 'dbpostgres',
-      entities: [`${__dirname}/typeorm/entities/*{.ts,.js}`],
+      entities: [__dirname + '/typeorm/entities/*.entity{.ts,.js}'],
       synchronize: true,
-    })
+    }),
+    ConversionModule
   ],
-  controllers: [AppController, ConversionController],
-  providers: [AppService, ConversionService],
 })
 export class AppModule {}
