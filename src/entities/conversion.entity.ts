@@ -1,6 +1,6 @@
-import { Column, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-
+@Entity('conversion')
 export class Conversion{
     @PrimaryGeneratedColumn()
     id: number;
