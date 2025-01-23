@@ -11,7 +11,7 @@ import { ConversionModule } from './conversion/conversion.module';
       username: 'adm',
       password: 'password',
       database: 'dbpostgres',
-      entities: [__dirname + '/typeorm/entities/*.entity{.ts,.js}'],
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     ConversionModule
