@@ -35,4 +35,9 @@ export class ConversionService {
             status: HttpStatus.CREATED
         };
     }
+
+    async destroy(id: number): Promise<HttpStatus> {
+        await this.conversionRepository.delete(id);
+        return HttpStatus.OK;
+    }
 }
