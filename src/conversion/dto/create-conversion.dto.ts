@@ -1,4 +1,4 @@
-import { IsNumber, isEmpty, IsString, Min, IsDecimal, MIN } from "class-validator";
+import { IsNumber, IsString, Min, IsDecimal } from "class-validator";
 
 export class CreateConversionDto {
     @IsNumber()
