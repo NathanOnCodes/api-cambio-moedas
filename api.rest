@@ -8,4 +8,9 @@ Content-Type: application/json
 
 
 ###
-GET http://127.0.0.1:3000/api/v1/exchange/ HTTP/1.1
+DELETE http://127.0.0.1:3000/api/v1/exchange/delete/2 HTTP/1.1
+
+
+###
+
+GET http://127.0.0.1:3000/api/v1/exchange HTTP/1.1
