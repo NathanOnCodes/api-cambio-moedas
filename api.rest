@@ -1,0 +1,11 @@
+@baseUrl=http://127.0.0.1:3000/
+
+
+### Nova conversão
+POST http://127.0.0.1:3000/api/v1/exchange/100/USD/BRL/5.20 HTTP/1.1
+Content-Type: application/json
+
+
+
+###
+GET http://127.0.0.1:3000/api/v1/exchange/ HTTP/1.1
