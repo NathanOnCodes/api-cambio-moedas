@@ -14,7 +14,7 @@ export class ConversionController {
         return this.conversionService.findAllExchanges();
     }
 
-    @Post(':amount/:from//:to/:rate/')
+    @Post(':amount/:from/:to/:rate/')
     createConversion(
         @Param() params: CreateConversionDto
     ): Promise<{conversion: Conversion, status: HttpStatus}>{
