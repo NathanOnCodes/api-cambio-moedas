@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Conversion } from 'src/entities/conversion.entity';
+import { Conversion } from '../entities/conversion.entity';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateConversionDto } from './dto/create-conversion.dto';
 
