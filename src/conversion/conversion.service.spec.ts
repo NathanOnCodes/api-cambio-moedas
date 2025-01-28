@@ -3,6 +3,7 @@ import { ConversionService } from './conversion.service';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Conversion } from '../entities/conversion.entity';
+import { error } from 'console';
 
 describe('ConversionService', () => {
   let service: ConversionService;
@@ -52,5 +53,16 @@ describe('ConversionService', () => {
       expect(result).toEqual(mockConversion);
       expect(repository.find).toHaveBeenCalledTimes(1);
     })
-  })
+  });
+
+    it('should handle empty array', async () => {
+      jest.spyOn(repository, 'find').mockResolvedValueOnce([]);
+      const result = await service.findAllExchanges();
+      expect(result).toEqual([]);
+    });
+
+    it('should handle repository errors', async () => {
+      jest.spyOn(repository, 'find').mockRejectedValueOnce(new Error('Error'));
+      await expect(service.findAllExchanges()).rejects.toThrow('Error');
+    })
 });
