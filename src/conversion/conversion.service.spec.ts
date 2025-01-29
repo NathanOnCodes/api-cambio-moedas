@@ -28,8 +28,9 @@ describe('ConversionService', () => {
   const mockRepository = {
     find: jest.fn().mockResolvedValue(mockConversion),
     save: jest.fn().mockImplementation((conversion) => Promise.resolve(conversion)),
-   
-  }
+    delete: jest.fn().mockImplementation((id) => Promise.resolve({ affected: 1 }))
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [ConversionService,
@@ -89,4 +90,19 @@ describe('ConversionService', () => {
           symbol: 'R$',
         });
       })})
+
+      describe('remove conversion', () =>{
+        it('should remove a conversion', async () => {
+          const id = 1
+          const res = await service.destroy(id)
+          expect(res).toBe(HttpStatus.OK);
+          expect(repository.delete).toHaveBeenCalledWith(id);
+        })
+
+        it('should handle deletion of non-existent id', async () => {
+          const id = 999;
+          mockRepository.delete.mockRejectedValueOnce(new Error('Conversion not found'));
+          await expect(service.destroy(id)).rejects.toThrow('Conversion not found');
+        })
+      });
 });
