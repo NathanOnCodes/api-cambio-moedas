@@ -84,6 +84,15 @@ describe('ConversionController', () => {
       console.log(result.status)
       expect(result.status).toBe(HttpStatus.CREATED || undefined);
       expect(service.newConversion).toHaveBeenCalledWith(params);
+    });
+  });
+
+  describe('deleteConversion', () => {
+    it('should delete a conversion', async () => {
+      const id = 1;
+      const result = await controller.deleteConversion(id);
+      expect(result).toBe(HttpStatus.OK);
+      expect(service.destroy).toHaveBeenCalledWith(id);
     })
   })
 }); 
