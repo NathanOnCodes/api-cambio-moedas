@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Conversion } from '../entities/conversion.entity';
 import { error } from 'console';
+import { CreateConversionDto } from './dto/create-conversion.dto';
+import { HttpStatus } from '@nestjs/common';
 
 describe('ConversionService', () => {
   let service: ConversionService;
@@ -24,7 +26,9 @@ describe('ConversionService', () => {
     }
   ]
   const mockRepository = {
-    find: jest.fn().mockResolvedValue(mockConversion)
+    find: jest.fn().mockResolvedValue(mockConversion),
+    save: jest.fn().mockImplementation((conversion) => Promise.resolve(conversion)),
+   
   }
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -65,4 +69,24 @@ describe('ConversionService', () => {
       jest.spyOn(repository, 'find').mockRejectedValueOnce(new Error('Error'));
       await expect(service.findAllExchanges()).rejects.toThrow('Error');
     })
+
+    describe('newConversion', () => {
+      it('should create a new conversion BRL', async () => {
+        const newConversion : CreateConversionDto = {
+          amount: 100,
+          rate: 5,
+          to: 'BRL',
+          from: 'USD'
+        }
+        const result = await service.newConversion(newConversion);
+        expect(result.status).toBe(HttpStatus.CREATED);
+        expect(result.conversion).toEqual({
+          value: 500,
+          symbol: 'R$',
+        });
+        expect(repository.save).toHaveBeenCalledWith({
+          value: 500,
+          symbol: 'R$',
+        });
+      })})
 });
