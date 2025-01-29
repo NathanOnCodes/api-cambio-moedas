@@ -54,6 +54,11 @@ describe('ConversionController', () => {
 
       expect(result).toEqual(expectedResult);
       expect(conversionService.findAllExchanges).toHaveBeenCalled();
+    });
+
+    it('should handle errors', async () => {
+      mockConversionService.findAllExchanges.mockRejectedValueOnce(new Error('Database Error'));
+      await expect(controller.findExchanges()).rejects.toThrow('Database Error');
     })
   })
 }); 
