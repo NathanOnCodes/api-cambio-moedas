@@ -3,7 +3,6 @@ import { ConversionService } from './conversion.service';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Conversion } from '../entities/conversion.entity';
-import { error } from 'console';
 import { CreateConversionDto } from './dto/create-conversion.dto';
 import { HttpStatus } from '@nestjs/common';
 
