@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConversionController } from './conversion.controller';
 import { ConversionService } from './conversion.service';
+import { HttpStatus } from '@nestjs/common';
 import { CreateConversionDto } from './dto/create-conversion.dto';
-import { Conversion } from 'src/entities/conversion.entity';
 
 describe('ConversionController', () => {
   let controller: ConversionController;
-  let conversionService: ConversionService;
+  let  service: ConversionService;
 
   const mockConversionService = {
     findAllExchanges: jest.fn().mockResolvedValue([
@@ -17,7 +17,15 @@ describe('ConversionController', () => {
         rate: 5.0, 
         date: new Date()
       }
-    ])
+    ]),
+    newConversion: jest.fn().mockResolvedValue({
+      conversion: {
+        id: 1,
+        value: 500,
+        symbol: "$"
+      }
+    }),
+    destroy: jest.fn().mockResolvedValue(HttpStatus.OK)
   };
   
   beforeEach(async () => {
@@ -30,12 +38,12 @@ describe('ConversionController', () => {
     }).compile();
 
     controller = module.get<ConversionController>(ConversionController);
-    conversionService = module.get<ConversionService>(ConversionService);
+    service = module.get<ConversionService>(ConversionService);
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
-    expect(conversionService).toBeDefined();
+    expect(service).toBeDefined();
   });
 
   describe('findAllExchanges', () => {
@@ -53,12 +61,29 @@ describe('ConversionController', () => {
       const result = await controller.findExchanges();
 
       expect(result).toEqual(expectedResult);
-      expect(conversionService.findAllExchanges).toHaveBeenCalled();
+      expect(service.findAllExchanges).toHaveBeenCalled();
     });
 
     it('should handle errors', async () => {
       mockConversionService.findAllExchanges.mockRejectedValueOnce(new Error('Database Error'));
       await expect(controller.findExchanges()).rejects.toThrow('Database Error');
+    })
+  });
+
+  describe('createConversion', () => {
+    it('should create a new conversion', async () => {
+      const params: CreateConversionDto = {
+        amount: 100,
+        from: 'USD',
+        to: 'BRL',
+        rate: 5.0
+      }
+
+      const result = await controller.createConversion(params);
+      expect(result.conversion).toBeDefined();
+      console.log(result.status)
+      expect(result.status).toBe(HttpStatus.CREATED || undefined);
+      expect(service.newConversion).toHaveBeenCalledWith(params);
     })
   })
 }); 
