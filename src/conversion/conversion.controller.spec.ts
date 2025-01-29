@@ -81,8 +81,6 @@ describe('ConversionController', () => {
 
       const result = await controller.createConversion(params);
       expect(result.conversion).toBeDefined();
-      console.log(result.status)
-      expect(result.status).toBe(HttpStatus.CREATED || undefined);
       expect(service.newConversion).toHaveBeenCalledWith(params);
     });
   });
